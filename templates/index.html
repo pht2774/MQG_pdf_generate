@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCQ Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+        }
+        h1 {
+            text-align: center;
+        }
+        #results {
+            margin-top: 20px;
+        }
+        .question {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>MCQ Generator</h1>
+        <form id="uploadForm">
+            <label for="pdf_file">Upload PDF:</label>
+            <input type="file" id="pdf_file" name="pdf_file" accept=".pdf" required>
+            <button type="submit">Generate MCQs</button>
+        </form>
+        <div id="results"></div>
+    </div>
+
+    <script>
+        const form = document.getElementById('uploadForm');
+        const resultsDiv = document.getElementById('results');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            resultsDiv.innerHTML = "Generating MCQs...";
+
+            const formData = new FormData(form);
+            const response = await fetch('/generate', {
+                method: 'POST',
+                body: formData,
+            });
+
+            if (response.ok) {
+                const mcqs = await response.json();
+                resultsDiv.innerHTML = '';
+                mcqs.forEach((mcq, index) => {
+                    const questionDiv = document.createElement('div');
+                    questionDiv.className = 'question';
+                    questionDiv.innerHTML = `
+                        <p><strong>Q${index + 1}: ${mcq.question}</strong></p>
+                        <ul>
+                            ${mcq.options.map(option => `<li>${option}</li>`).join('')}
+                        </ul>
+                    `;
+                    resultsDiv.appendChild(questionDiv);
+                });
+            } else {
+                const error = await response.json();
+                resultsDiv.innerHTML = `<p style="color: red;">Error: ${error.error}</p>`;
+            }
+        });
+    </script>
+</body>
+</html>
