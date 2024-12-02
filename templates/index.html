@@ -4,25 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MCQ Generator</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-        .container {
-            max-width: 600px;
-            margin: auto;
-        }
-        h1 {
-            text-align: center;
-        }
-        #results {
-            margin-top: 20px;
-        }
-        .question {
-            margin-bottom: 20px;
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
@@ -35,13 +17,17 @@
         <div id="results"></div>
     </div>
 
+    <footer>
+        &copy; 2024 MCQ Generator. Built with ❤.
+    </footer>
+
     <script>
         const form = document.getElementById('uploadForm');
         const resultsDiv = document.getElementById('results');
 
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
-            resultsDiv.innerHTML = "Generating MCQs...";
+            resultsDiv.innerHTML = "<p>Generating MCQs...</p>";
 
             const formData = new FormData(form);
             const response = await fetch('/generate', {
@@ -56,7 +42,7 @@
                     const questionDiv = document.createElement('div');
                     questionDiv.className = 'question';
                     questionDiv.innerHTML = `
-                        <p><strong>Q${index + 1}: ${mcq.question}</strong></p>
+                        <p>Q${index + 1}: ${mcq.question}</p>
                         <ul>
                             ${mcq.options.map(option => `<li>${option}</li>`).join('')}
                         </ul>
