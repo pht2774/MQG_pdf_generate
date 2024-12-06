@@ -6,7 +6,7 @@ from transformers import pipeline
 app = Flask(__name__)
 
 # Load the question-generation model
-qa_model = pipeline("question-generation", model="valhalla/t5-small-qg-prepend")
+qa_model = pipeline("text2text-generation", model="mrm8488/t5-base-finetuned-question-generation-ap")
 
 # Function to extract text from PDF
 def extract_text_from_pdf(pdf_file):
